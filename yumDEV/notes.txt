@@ -1,0 +1,58 @@
+### create rpmbuild sub directory in the home dir
+
+rpmdev-setuptree
+
+### create a spec file
+
+#hello-world.spec
+Name:       hello-world
+Version:    1
+Release:    1
+Summary:    Most simple RPM package
+License:    FIXME
+
+%description
+This is my first RPM package, which does nothing.
+
+%prep
+# we have no source, so nothing here
+
+%build
+cat > hello-world.sh <<EOF
+#!/usr/bin/bash
+echo Hello world
+EOF
+
+%install
+mkdir -p %{buildroot}/usr/bin/
+install -m 755 hello-world.sh %{buildroot}/usr/bin/hello-world.sh
+
+%files
+/usr/bin/hello-world.sh
+
+%changelog
+# let's skip this for now
+
+######################################
+
+# Build the package
+
+rpmbuild -ba hello-world.spec
+
+# Post the rpm to the repo
+
+curl -v --user 'admin:password' --upload-file /root/rpmbuild/RPMS/x86_64/hello-world-1-1.x86_64.rpm http://192.168.0.189:8081/repository/stnv-home-rpm/
+
+# add the repo to the client
+
+# cat /etc/yum.repos.d/stnv-home.repo
+[stnv-home]
+name=Custom Yum Repository
+baseurl=http://192.168.0.189:8081/repository/stnv-home-rpm/
+enabled=1
+gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+priority=1
+
+
+

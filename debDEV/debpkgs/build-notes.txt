@@ -1,0 +1,25 @@
+
+### Create the dir of the package name_version_arch
+
+
+### Build the dep package
+
+dpkg-deb --build /root/debDEV/debpkgs/firstdeb_1
+
+
+### create and export private/public key for the repo
+
+gpg --gen-key
+gpg --list-keys
+gpg --armor --output public.gpg.key --export B68D93E9
+gpg --armor --output private.gpg.key --export-secret-key B32AE69A
+
+##
+
+# Upload it to nexus repo
+curl -u "user:password"  -H "Content-Type: multipart/form-data" --data-binary "@./firstdeb_1.deb" "http://192.168.0.189:8081/repository/stnv-dev/"
+
+
+
+
+

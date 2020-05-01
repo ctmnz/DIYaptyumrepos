@@ -1,0 +1,8 @@
+Package: firstdeb
+Version: 1.0.2
+Architecture: all
+Essential: no
+Priority: optional
+Depends: bash
+Maintainer: Daniel Stoinov
+Description: Just a test application for deb package that should be installed using apt
